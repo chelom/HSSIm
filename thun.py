@@ -155,7 +155,7 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
 	plt.ylabel('percent')
 	plt.title("C'Thun turn\n drawOne: %s    drawTwo: %s" % (drawOne, drawTwo))
 	plt.legend()
-	plt.savefig("Stotawaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
+	plt.savefig("Stowaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
 	
 def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 	axisYTotal = []
@@ -211,7 +211,7 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
-	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (stowaway, drawTwo))
+	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (drawTwo, stowaway))
 	plt.legend()
 	plt.savefig("DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawTwo)+'.png')
 
