@@ -184,7 +184,7 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 	plt.ylabel('percent')
 	plt.title("C'Thun turn\n Stowaway: %s    drawTwo: %s" % (stowaway, drawTwo))
 	plt.legend()
-	plt.savefig("DrawOne_S1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
+	plt.savefig("DrawOne_S1_" + str(stowaway) +"_D2_" + str(drawTwo)+'.png')
 	
 def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 	axisYTotal = []
@@ -213,7 +213,7 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 	plt.ylabel('percent')
 	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (stowaway, drawTwo))
 	plt.legend()
-	plt.savefig("DrawTwo_S1_" + str(drawOne) +"_D1_" + str(drawTwo)+'.png')
+	plt.savefig("DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawTwo)+'.png')
 
 def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate):
 	if parameterToIterate == 0:
