@@ -128,14 +128,14 @@ def normalize(list):
 		ret.append((1.0*k)/sum(list))
 	return(ret)
 
-def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
+def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8, 0.8, 0.8]
-	graphAlpha = [1, 0.6, 0.4]
-	graphFill = [True,True,False]
-	graphHatch = ["O","",""]
-	for stowaway in range(stowawayNumber+1):
+	graphWidth = [0.8 for k in range(stowawayNumber+1)]
+	graphAlpha = [1-((0.15*k)) for k in range(stowawayNumber+1)]
+	graphFill = [(lambda k:True if k in range(stowawayNumber) else False)(k) for k in range(stowawayNumber+1)]
+	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(stowaway+1)]
+	for stowaway in range(startNumber, startNumber+stowawayNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
 		keys.sort()
@@ -147,7 +147,7 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of stowaways: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
+		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of stowaways: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
 	if (cummulative):
 		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
@@ -157,14 +157,14 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
 	plt.legend()
 	plt.savefig("Stowaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
 	
-def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
+def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8, 0.8, 0.8]
-	graphAlpha = [1, 0.6, 0.4]
-	graphFill = [True,True,False]
-	graphHatch = ["O","",""]
-	for drawOne in range(drawOneNumber+1):
+	graphWidth = [0.8 for k in range(drawOneNumber+1)]
+	graphAlpha = [1-((0.15*k)) for k in range(drawOneNumber+1)]
+	graphFill = [(lambda k:True if k in range(drawOneNumber) else False)(k) for k in range(drawOneNumber+1)]
+	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawOneNumber+1)]
+	for drawOne in range(startNumber, startNumber+drawOneNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
 		keys.sort()
@@ -176,7 +176,7 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawOne: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
+		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawOne: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
 	if (cummulative):
 		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
@@ -186,14 +186,14 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 	plt.legend()
 	plt.savefig("DrawOne_S1_" + str(stowaway) +"_D2_" + str(drawTwo)+'.png')
 	
-def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
+def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8, 0.8, 0.8]
-	graphAlpha = [1, 0.6, 0.4]
-	graphFill = [True,True,False]
-	graphHatch = ["O","",""]
-	for drawTwo in range(drawTwoNumber + 1):
+	graphWidth = [0.8 for k in range(drawTwoNumber+1)]
+	graphAlpha = [1-((0.15*k)) for k in range(drawTwoNumber+1)]
+	graphFill = [(lambda k:True if k in range(drawTwoNumber) else False)(k) for k in range(drawTwoNumber+1)]
+	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawTwoNumber+1)]
+	for drawTwo in range(startNumber, startNumber+drawTwoNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
 		keys.sort()
@@ -205,23 +205,23 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawTwo: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
+		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawTwo: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
 	if (cummulative):
 		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
-	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (drawTwo, stowaway))
+	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (drawOne, stowaway))
 	plt.legend()
-	plt.savefig("DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawTwo)+'.png')
+	plt.savefig("DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawOne)+'.png')
 
-def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate):
+def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate, startNumber):
 	if parameterToIterate == 0:
-		plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowaway)
+		plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowaway, startNumber)
 	elif parameterToIterate == 1:
-		plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOne)
+		plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOne, startNumber)
 	elif parameterToIterate == 2:
-		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo)
+		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo, startNumber)
 
 
-SimulateWithParameters(100000, True, 2, 2, 2, 0)
+SimulateWithParameters(1000, True, 2, 2, 0, 1, 0)
