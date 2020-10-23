@@ -213,12 +213,6 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 	plt.savefig("DrawTwo_S1_" + str(drawOne) +"_D1_" + str(drawTwo)+'.png')
 
 def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate):
-	axisYTotal = []
-	axisXTotal = []
-	graphWidth = [0.8, 0.8, 0.8]
-	graphAlpha = [1, 0.6, 0.4]
-	graphFill = [True,True,False]
-	graphHatch = ["O","",""]
 	if parameterToIterate == 0:
 		plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowaway)
 	elif parameterToIterate == 1:
@@ -227,5 +221,4 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo)
 
 
-SimulateWithParameters(100000, True, 2, 0, 0, 0)
-		
+SimulateWithParameters(100000, True, 2, 2, 2, 0)
