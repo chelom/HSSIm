@@ -73,17 +73,18 @@ class deck:
 						self.deck.remove(thunCardsDeck[0])
 						thunCardsDeck.remove(thunCardsDeck[0])
 				currentMana -=5
-			elif len(drawOneCards)>0 and currentMana >=2:
-				card = drawOneCards[0]
-				self.hand.remove(card)
-				self.drawCard()
-				currentMana -=2
 			elif len(drawTwoCards)>0 and currentMana >=3:
 				card = drawTwoCards[0]
 				self.hand.remove(card)
 				self.drawCard()
 				self.drawCard()
 				currentMana -=3
+			elif len(drawOneCards)>0 and currentMana >=2:
+				card = drawOneCards[0]
+				self.hand.remove(card)
+				self.drawCard()
+				currentMana -=2
+
 			else:
 				return(False)
 		return(False)
@@ -132,7 +133,7 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber = 2, 
 	axisYTotal = []
 	axisXTotal = []
 	graphWidth = [0.8 for k in range(stowawayNumber+1)]
-	graphAlpha = [1-((0.15*k)) for k in range(stowawayNumber+1)]
+	graphAlpha = [1-((0.2*k)) for k in range(stowawayNumber+1)]
 	graphFill = [(lambda k:True if k in range(stowawayNumber) else False)(k) for k in range(stowawayNumber+1)]
 	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(stowawayNumber+1)]
 	for stowaway in range(startNumber, startNumber+stowawayNumber + 1):
@@ -161,7 +162,7 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2, s
 	axisYTotal = []
 	axisXTotal = []
 	graphWidth = [0.8 for k in range(drawOneNumber+1)]
-	graphAlpha = [1-((0.15*k)) for k in range(drawOneNumber+1)]
+	graphAlpha = [1-((0.2*k)) for k in range(drawOneNumber+1)]
 	graphFill = [(lambda k:True if k in range(drawOneNumber) else False)(k) for k in range(drawOneNumber+1)]
 	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawOneNumber+1)]
 	for drawOne in range(startNumber, startNumber+drawOneNumber + 1):
@@ -190,7 +191,7 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2, s
 	axisYTotal = []
 	axisXTotal = []
 	graphWidth = [0.8 for k in range(drawTwoNumber+1)]
-	graphAlpha = [1-((0.15*k)) for k in range(drawTwoNumber+1)]
+	graphAlpha = [1-((0.2*k)) for k in range(drawTwoNumber+1)]
 	graphFill = [(lambda k:True if k in range(drawTwoNumber) else False)(k) for k in range(drawTwoNumber+1)]
 	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawTwoNumber+1)]
 	for drawTwo in range(startNumber, startNumber+drawTwoNumber + 1):
@@ -224,4 +225,4 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo, startNumber)
 
 
-SimulateWithParameters(100000, True, 2, 0, 1, 0, 0)
+SimulateWithParameters(100000, True, 0, 0, 2, 0, 0)
