@@ -134,7 +134,7 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber = 2, 
 	graphWidth = [0.8 for k in range(stowawayNumber+1)]
 	graphAlpha = [1-((0.15*k)) for k in range(stowawayNumber+1)]
 	graphFill = [(lambda k:True if k in range(stowawayNumber) else False)(k) for k in range(stowawayNumber+1)]
-	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(stowaway+1)]
+	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(stowawayNumber+1)]
 	for stowaway in range(startNumber, startNumber+stowawayNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
@@ -224,4 +224,4 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo, startNumber)
 
 
-SimulateWithParameters(1000, True, 2, 2, 0, 1, 0)
+SimulateWithParameters(100000, True, 2, 0, 1, 0, 0)
