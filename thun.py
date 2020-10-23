@@ -148,7 +148,8 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
 		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of stowaways: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	plt.axhline(y=0.5, color='k', linestyle='-')
+	if (cummulative):
+		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
@@ -176,7 +177,8 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
 		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawOne: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	plt.axhline(y=0.5, color='k', linestyle='-')
+	if (cummulative):
+		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
@@ -204,7 +206,8 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 		axisXTotal.append([k for k in axisX])
 	for k in range(len(axisYTotal)):
 		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawTwo: "+str(k), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	plt.axhline(y=0.5, color='k', linestyle='-')
+	if (cummulative):
+		plt.axhline(y=0.5, color='k', linestyle='-')
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
