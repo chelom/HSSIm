@@ -152,7 +152,8 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber):
 	frame1 = plt.gca()
 	plt.xlabel('turn')
 	plt.ylabel('percent')
-	plt.title("C'Thun turn\n drawOne: %s    drawTwo: %s" % (drawOne, drawTwo)) 
+	plt.title("C'Thun turn\n drawOne: %s    drawTwo: %s" % (drawOne, drawTwo))
+	plt.legend()
 	plt.savefig("Stotawaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
 	
 def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
@@ -180,6 +181,7 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2):
 	plt.xlabel('turn')
 	plt.ylabel('percent')
 	plt.title("C'Thun turn\n Stowaway: %s    drawTwo: %s" % (stowaway, drawTwo))
+	plt.legend()
 	plt.savefig("DrawOne_S1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
 	
 def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
@@ -207,6 +209,7 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2):
 	plt.xlabel('turn')
 	plt.ylabel('percent')
 	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (stowaway, drawTwo))
+	plt.legend()
 	plt.savefig("DrawTwo_S1_" + str(drawOne) +"_D1_" + str(drawTwo)+'.png')
 
 def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate):
@@ -225,5 +228,4 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 
 
 SimulateWithParameters(100000, True, 2, 0, 0, 0)
-	
-	
+		
