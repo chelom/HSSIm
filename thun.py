@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 run = 0
 
 class card:
-	def __init__(self, card):
+	def __init__(self, card, nextTurn = False):
 		self.card = card
+		self.nextTurn = nextTurn
 		
 class deck:
 	def __init__(self, stoways, drawOne, drawTwo):
@@ -15,20 +16,25 @@ class deck:
 		cards = 29
 		normalCards = cards - stoways - drawOne - drawTwo
 		self.deck = [card(0) for k in range(normalCards)]
+		self.drawStartTurn = 0
 		for k in range(stoways):
 			self.deck.append(card(1))
+		for k in range(drawOne):
+			if (k < number_Of_Draw_One_CardsImmediatly):
+				self.deck.append(card(4))
+			else:
+				self.deck.append(card(4, True))
+		for k in range(drawTwo):
+			if (k < number_Of_Draw_Two_CardsImmediatly):
+				self.deck.append(card(5))
+			else:
+				self.deck.append(card(5,True))
+		self.start()
 		for k in range(4):
 			self.deck.append(card(2))
-		for k in range(drawOne):
-			self.deck.append(card(4))
-		for k in range(drawTwo):
-			self.deck.append(card(5))
-		self.start()
-	
 	def start(self):
 		for k in range(3):
 			self.drawCard()
-	
 	def shuffleCThun(self):
 		self.deck.append(card(3))
 	
@@ -38,8 +44,16 @@ class deck:
 			self.deck.remove(card)
 			self.hand.append(card)
 	def playCard(self):
-		currentMana = min(self.turn,10)
+	
 		global run
+		global chancePlayingOtherThanDraw
+		
+		for k in range(self.drawStartTurn):
+			self.drawCard()
+		self.drawStartTurn = 0
+		
+		currentMana = min(self.turn,10)
+
 		while currentMana >= 2:
 			thunCards = [k for k in self.hand if k.card == 2]
 			stowaysCards = [k for k in self.hand if k.card == 1]
@@ -76,15 +90,20 @@ class deck:
 			elif len(drawTwoCards)>0 and currentMana >=3:
 				card = drawTwoCards[0]
 				self.hand.remove(card)
-				self.drawCard()
-				self.drawCard()
+				if ( not card.nextTurn):
+					self.drawCard()
+					self.drawCard()
+				else:
+					self.drawStartTurn +=2
 				currentMana -=3
 			elif len(drawOneCards)>0 and currentMana >=2:
 				card = drawOneCards[0]
 				self.hand.remove(card)
-				self.drawCard()
+				if (not card.nextTurn):	
+					self.drawCard()
+				else:
+					self.drawStartTurn +=1
 				currentMana -=2
-
 			else:
 				return(False)
 		return(False)
@@ -128,14 +147,26 @@ def normalize(list):
 	for k in list:
 		ret.append((1.0*k)/sum(list))
 	return(ret)
-
+	
+def plot(axisXTotal, axisYTotal, labels, cummulative, title, numberIterate, saveName):
+	graphWidth = [0.95 for k in range(numberIterate+1)]
+	graphAlpha = [1-((0.2*k)) for k in range(numberIterate+1)]
+	graphFill = [(lambda k:True if k in range(numberIterate) else False)(k) for k in range(numberIterate+1)]
+	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(numberIterate+1)]
+	if (cummulative):
+		axisYTotal = [cumulative(k) for k in axisYTotal]
+		plt.axhline(y=0.5, color='k', linestyle='-')
+	for k in range(len(axisYTotal)):
+		plt.bar(axisXTotal[k], axisYTotal[k], label = labels[k], alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
+	plt.xlabel('turn')
+	plt.ylabel('percent')
+	plt.legend()
+	plt.title(title)
+	plt.savefig(saveName)
+	
 def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8 for k in range(stowawayNumber+1)]
-	graphAlpha = [1-((0.2*k)) for k in range(stowawayNumber+1)]
-	graphFill = [(lambda k:True if k in range(stowawayNumber) else False)(k) for k in range(stowawayNumber+1)]
-	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(stowawayNumber+1)]
 	for stowaway in range(startNumber, startNumber+stowawayNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
@@ -143,28 +174,16 @@ def plotWithStowaway(numSim, cummulative, drawOne, drawTwo, stowawayNumber = 2, 
 		axisX = [k for k in keys]
 		axisY = [temp[k] for k in axisX]
 		axisY = normalize(axisY)
-		if(cummulative):
-			axisY = cumulative(axisY)
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
-	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of stowaways: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	if (cummulative):
-		plt.axhline(y=0.5, color='k', linestyle='-')
-	frame1 = plt.gca()
-	plt.xlabel('turn')
-	plt.ylabel('percent')
-	plt.title("C'Thun turn\n drawOne: %s    drawTwo: %s" % (drawOne, drawTwo))
-	plt.legend()
-	plt.savefig("Stowaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
+	labels = [("number of stowaways: "+str(k + startNumber)) for k in range(len(axisYTotal))]
+	title = "C'Thun turn\n drawOne: %s    drawTwo: %s" % (drawOne, drawTwo)
+	saveName = ("Stowaway_D1_" + str(drawOne) +"_D2_" + str(drawTwo)+'.png')
+	plot(axisXTotal, axisYTotal, labels, cummulative, title, stowawayNumber, saveName)
 	
 def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8 for k in range(drawOneNumber+1)]
-	graphAlpha = [1-((0.2*k)) for k in range(drawOneNumber+1)]
-	graphFill = [(lambda k:True if k in range(drawOneNumber) else False)(k) for k in range(drawOneNumber+1)]
-	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawOneNumber+1)]
 	for drawOne in range(startNumber, startNumber+drawOneNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
@@ -172,28 +191,16 @@ def plotWithDrawOne(numSim, cummulative, stowaway, drawTwo, drawOneNumber = 2, s
 		axisX = [k for k in keys]
 		axisY = [temp[k] for k in axisX]
 		axisY = normalize(axisY)
-		if(cummulative):
-			axisY = cumulative(axisY)
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
-	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawOne: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	if (cummulative):
-		plt.axhline(y=0.5, color='k', linestyle='-')
-	frame1 = plt.gca()
-	plt.xlabel('turn')
-	plt.ylabel('percent')
-	plt.title("C'Thun turn\n Stowaway: %s    drawTwo: %s" % (stowaway, drawTwo))
-	plt.legend()
-	plt.savefig("DrawOne_S1_" + str(stowaway) +"_D2_" + str(drawTwo)+'.png')
+	labels = [("number of drawOne: "+str(k + startNumber)) for k in range(len(axisYTotal))]
+	title = "C'Thun turn\n Stowaway: %s    drawTwo: %s" % (stowaway, drawTwo)
+	saveName = "DrawOne_S1_" + str(stowaway) +"_D2_" + str(drawTwo)+'.png'
+	plot(axisXTotal, axisYTotal, labels, cummulative, title, drawOneNumber, saveName)
 	
 def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2, startNumber = 0):
 	axisYTotal = []
 	axisXTotal = []
-	graphWidth = [0.8 for k in range(drawTwoNumber+1)]
-	graphAlpha = [1-((0.2*k)) for k in range(drawTwoNumber+1)]
-	graphFill = [(lambda k:True if k in range(drawTwoNumber) else False)(k) for k in range(drawTwoNumber+1)]
-	graphHatch = [(lambda k: "O" if k in [0] else "")(k) for k in range(drawTwoNumber+1)]
 	for drawTwo in range(startNumber, startNumber+drawTwoNumber + 1):
 		temp = simulate(numSim, stowaway, drawOne, drawTwo)
 		keys = [k for k in temp.keys()]
@@ -201,20 +208,12 @@ def plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwoNumber = 2, s
 		axisX = [k for k in keys]
 		axisY = [temp[k] for k in axisX]
 		axisY = normalize(axisY)
-		if(cummulative):
-			axisY = cumulative(axisY)
 		axisYTotal.append([k for k in axisY])
 		axisXTotal.append([k for k in axisX])
-	for k in range(len(axisYTotal)):
-		plt.bar(axisXTotal[k], axisYTotal[k], label = "number of drawTwo: "+str(k + startNumber), alpha = graphAlpha[k], width = graphWidth[k], fill = graphFill[k], hatch = graphHatch[k])
-	if (cummulative):
-		plt.axhline(y=0.5, color='k', linestyle='-')
-	frame1 = plt.gca()
-	plt.xlabel('turn')
-	plt.ylabel('percent')
-	plt.title("C'Thun turn\n drawOne: %s    Stowaway: %s" % (drawOne, stowaway))
-	plt.legend()
-	plt.savefig("DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawOne)+'.png')
+	labels = [("number of drawTwo: "+str(k + startNumber)) for k in range(len(axisYTotal))]
+	title = "C'Thun turn\n drawOne: %s    Stowaway: %s" % (drawOne, stowaway)
+	saveName = "DrawTwo_S1_" + str(stowaway) +"_D1_" + str(drawOne)+'.png'
+	plot(axisXTotal, axisYTotal, labels, cummulative, title, drawTwoNumber, saveName)
 
 def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, parameterToIterate, startNumber):
 	if parameterToIterate == 0:
@@ -225,4 +224,7 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 		plotWithDrawTwo(numSim, cummulative, stowaway, drawOne, drawTwo, startNumber)
 
 
-SimulateWithParameters(100000, True, 0, 0, 2, 0, 0)
+number_Of_Draw_One_CardsImmediatly = 4
+number_Of_Draw_Two_CardsImmediatly = 2
+
+SimulateWithParameters(10000, False, 2, 2, 4, 1, 4)
