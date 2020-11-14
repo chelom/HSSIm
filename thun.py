@@ -227,4 +227,4 @@ def SimulateWithParameters(numSim, cummulative, stowaway, drawOne, drawTwo, para
 number_Of_Draw_One_CardsImmediatly = 4
 number_Of_Draw_Two_CardsImmediatly = 2
 
-SimulateWithParameters(10000, False, 2, 2, 4, 1, 4)
+SimulateWithParameters(100000, False, 2, 2, 4, 1, 4)
